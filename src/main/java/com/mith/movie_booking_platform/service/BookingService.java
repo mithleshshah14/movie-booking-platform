@@ -11,4 +11,6 @@ import com.mith.movie_booking_platform.response.BookingResponse;
 public interface BookingService {
 
     BookingResponse bookShow(BookingRequest bookingRequest);
+
+    BookingResponse getBooking(Long bookingId);
 }

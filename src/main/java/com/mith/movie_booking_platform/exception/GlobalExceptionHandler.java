@@ -22,6 +22,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(errorResponse);
     }
 
+    @ExceptionHandler(SeatNotAvailableException.class)
+    public ResponseEntity<ErrorResponse> seatNotAvailableExceptionHandler(SeatNotAvailableException ex){
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), 404, "Seat Not Available",ex.getMessage());
+        return ResponseEntity.status(404).body(errorResponse);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> genericExceptionHandler(Exception ex){
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), 404, "Internal Server Error",ex.getMessage());
+        return ResponseEntity.status(404).body(errorResponse);
+    }
+
 
 }
 

@@ -1,33 +1,35 @@
 package com.mith.movie_booking_platform.kafka;
 
-import lombok.AllArgsConstructor;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * @author mithl
  * @date 21-02-2026
  * @email mithleshshah84@gmail.com
  */
-@Slf4j
-@AllArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class BookingEventProducer {
 
-    private KafkaTemplate<String, BookingEvent> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
-    @Value("${kafka.topic}")
-    private String topic;
+    private static final String TOPIC = "booking-events";
 
-    public void publishBookingEvent(BookingEvent bookingEvent) {
-        log.info("Publishing booking event:{}", bookingEvent.getBookingId());
-        kafkaTemplate.send(topic, bookingEvent);
-        log.info("Booking event published successfully");
+    public void publishBookingEvent(BookingEvent event) {
+        try {
+            String jsonEvent = objectMapper.writeValueAsString(event);
+            kafkaTemplate.send(TOPIC, jsonEvent);
+            log.info("Published: {}", event.getBookingId());
+        } catch (Exception e) {
+            log.error("Failed to publish", e);
+        }
     }
-
-
-
-
 }

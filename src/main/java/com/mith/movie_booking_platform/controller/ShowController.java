@@ -31,6 +31,13 @@ public class ShowController {
         return ResponseEntity.ok(showResponseList);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<ShowResponse>> getAllShows(){
+        List<ShowResponse> showResponseList = showService.getAllShows();
+
+        return ResponseEntity.ok(showResponseList);
+    }
+
     @GetMapping("/{showId}/seats")
     public ResponseEntity<List<SeatResponse>> getSeatsForShow(@PathVariable Long showId){
         List<SeatResponse> seatResponseList = showService.getSeatsForShow(showId);

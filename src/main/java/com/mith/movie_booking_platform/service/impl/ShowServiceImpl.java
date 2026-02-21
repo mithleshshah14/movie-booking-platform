@@ -44,7 +44,14 @@ public class ShowServiceImpl implements ShowService {
 
         List<Show> shows =   showRepository.getShows(movieId, city, date);
 
-        return shows.stream().map(e -> showMapper.entityToResponse(e)).toList();
+        return shows.stream().map(showMapper::entityToResponse).toList();
+    }
+
+    @Override
+    public List<ShowResponse> getAllShows() {
+
+        List<Show> shows = showRepository.findAll();
+        return shows.stream().map(showMapper::entityToResponse).toList();
     }
 
     @Override
@@ -54,6 +61,6 @@ public class ShowServiceImpl implements ShowService {
 
         List<Seat> seats = seatRepository.findByShowIdAndStatus(showId, SeatStatus.AVAILABLE);
 
-        return seats.stream().map(s -> seatMapper.entityToResponse(s)).toList();
+        return seats.stream().map(seatMapper::entityToResponse).toList();
     }
 }

@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
  * @date 21-02-2026
  * @email mithleshshah84@gmail.com
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface SeatMapper {
 
     SeatResponse entityToResponse(Seat seat);

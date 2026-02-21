@@ -103,6 +103,12 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.entityToResponse(booked);
     }
 
+    @Override
+    public BookingResponse getBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking not found for id: "+bookingId));
+        return bookingMapper.entityToResponse(booking);
+    }
+
     public static double calculatePrice(double price, int numberOfSeats, LocalTime showTime) {
         double totalPrice = price * numberOfSeats;
 

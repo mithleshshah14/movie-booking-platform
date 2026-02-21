@@ -6,10 +6,7 @@ import com.mith.movie_booking_platform.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author mithl
@@ -28,6 +25,14 @@ public class BookingController {
     public ResponseEntity<BookingResponse> bookShow(@Valid @RequestBody BookingRequest bookingRequest){
 
         BookingResponse bookingResponse = bookingService.bookShow(bookingRequest);
+
+        return ResponseEntity.status(201).body(bookingResponse);
+    }
+
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<BookingResponse> getBookingId(@PathVariable Long bookingId){
+
+        BookingResponse bookingResponse = bookingService.getBooking(bookingId);
 
         return ResponseEntity.status(201).body(bookingResponse);
     }

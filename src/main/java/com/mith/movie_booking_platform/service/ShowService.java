@@ -15,5 +15,7 @@ public interface ShowService {
 
     List<ShowResponse> getShows(Long movieId, String city, LocalDate date);
 
+    List<ShowResponse> getAllShows();
+
     List<SeatResponse> getSeatsForShow(Long showId);
 }
