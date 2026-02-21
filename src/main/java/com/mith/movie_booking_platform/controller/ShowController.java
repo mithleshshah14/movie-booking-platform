@@ -26,11 +26,14 @@ public class ShowController {
     @GetMapping
     public ResponseEntity<List<ShowResponse>> getShows(@RequestParam Long movieId, @RequestParam String city,
                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate date){
+        List<ShowResponse> showResponseList = showService.getShows(movieId, city, date);
 
+        return ResponseEntity.ok(showResponseList);
     }
 
     @GetMapping("/{showId}/seats")
-    public ResponseEntity<SeatResponse> getSeatsForShow(@PathVariable Long showId){
-
+    public ResponseEntity<List<SeatResponse>> getSeatsForShow(@PathVariable Long showId){
+        List<SeatResponse> seatResponseList = showService.getSeatsForShow(showId);
+        return ResponseEntity.ok(seatResponseList);
     }
 }

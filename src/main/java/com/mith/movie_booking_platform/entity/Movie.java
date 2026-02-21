@@ -27,6 +27,7 @@ public class Movie {
     private String title;
 
     private String language;
+
     private String genre;
 
     @Column(name = "duration_minutes")

@@ -1,14 +1,14 @@
 package com.mith.movie_booking_platform.response;
 
 import com.mith.movie_booking_platform.enums.BookingStatus;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -16,40 +16,35 @@ import java.util.List;
  * @date 20-02-2026
  * @email mithleshshah84@gmail.com
  */
-@Entity
-@Table(name = "bookings")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class BookingResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long bookingId;
 
-    @ManyToOne
-    @JoinColumn(name = "show_id", nullable = false)
-    private ShowResponse show;
-
-    @Column(name = "user_id", nullable = false)
     private String userId;
 
-    @ManyToMany
-    @JoinTable(
-            name = "booking_seats",
-            joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "seat_id")
-    )
-    private List<SeatResponse> seats = new ArrayList<>();
+    private Long showId;
 
-    @Column(name = "booking_time", nullable = false)
-    private LocalDateTime bookingTime;
+    private String movieTitle;
 
-    @Column(name = "total_price", nullable = false)
+    private String theatreName;
+
+    private String city;
+
+    private String theatreAddress;
+
+    private LocalDate showDate;
+
+    private LocalTime showTime;
+
+    private List<String> seatNumbers;
+
     private Double totalPrice;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    private LocalDateTime bookingTime;
+
     private BookingStatus status;
 }

@@ -1,5 +1,6 @@
 package com.mith.movie_booking_platform.entity;
 
+import com.mith.movie_booking_platform.enums.SeatStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

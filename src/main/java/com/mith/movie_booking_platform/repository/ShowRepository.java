@@ -16,5 +16,6 @@ import java.util.List;
 @Repository
 public interface ShowRepository extends JpaRepository<Show, Long> {
 
-    List<Show> getShows(Long MoviesId, String city, LocalDate date);
+    @Query("select s from Show s join s.theatre t join s.movie m where m.id= :movieId and s.showDate= :date and t.city = :city")
+    List<Show> getShows (Long movieId, String city, LocalDate date);
 }

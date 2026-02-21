@@ -1,6 +1,5 @@
 package com.mith.movie_booking_platform.response;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,35 +13,33 @@ import java.time.LocalTime;
  * @date 20-02-2026
  * @email mithleshshah84@gmail.com
  */
-@Entity
-@Table(name = "shows")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ShowResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long showId;
 
-    @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)
-    private MovieResponse movie;
+    private String movieTitle;
 
-    @ManyToOne
-    @JoinColumn(name = "theatre_id", nullable = false)
-    private TheatreResponse theatre;
+    private String language;
 
-    @Column(name = "show_date", nullable = false)
+    private String genre;
+
+    private String theatreName;
+
+    private String city;
+
+    private String theatreAddress;
+
     private LocalDate showDate;
 
-    @Column(name = "show_time", nullable = false)
     private LocalTime showTime;
 
-    @Column(nullable = false)
     private Double price;
 
-    @Column(name = "total_seats")
     private Integer totalSeats;
+
+    private Integer availableSeats;
 }
