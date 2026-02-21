@@ -7,6 +7,8 @@ import com.mith.movie_booking_platform.enums.BookingStatus;
 import com.mith.movie_booking_platform.enums.SeatStatus;
 import com.mith.movie_booking_platform.exception.ResourceNotFoundException;
 import com.mith.movie_booking_platform.exception.SeatNotAvailableException;
+import com.mith.movie_booking_platform.kafka.BookingEvent;
+import com.mith.movie_booking_platform.kafka.BookingEventProducer;
 import com.mith.movie_booking_platform.mapper.BookingMapper;
 import com.mith.movie_booking_platform.repository.BookingRepository;
 import com.mith.movie_booking_platform.repository.SeatRepository;
@@ -38,6 +40,8 @@ public class BookingServiceImpl implements BookingService {
     private final SeatRepository seatRepository;
 
     private final BookingMapper bookingMapper;
+
+    private final BookingEventProducer bookingEventProducer;
 
     @Transactional
     @Override
@@ -80,7 +84,23 @@ public class BookingServiceImpl implements BookingService {
                 .totalPrice(seatCount * showPrice)
                 .build();
 
-        return bookingMapper.entityToResponse(bookingRepository.save(booking));
+        Booking booked = bookingRepository.save(booking);
+
+        BookingEvent bookingEvent = BookingEvent.builder()
+                .bookingId(booked.getId())
+                .movieTitle(show.getMovie().getTitle())
+                .seatNumbers(booked.getSeats().stream().map(Seat::getSeatNumber).toList())
+                .showDate(show.getShowDate())
+                .theatreName(show.getTheatre().getName())
+                .totalPrice(booked.getTotalPrice())
+                .userId(booked.getUserId())
+                .bookingTime(LocalDateTime.now())
+                .showTime(show.getShowTime())
+                .build();
+
+        bookingEventProducer.publishBookingEvent(bookingEvent);
+
+        return bookingMapper.entityToResponse(booked);
     }
 
     public static double calculatePrice(double price, int numberOfSeats, LocalTime showTime) {
