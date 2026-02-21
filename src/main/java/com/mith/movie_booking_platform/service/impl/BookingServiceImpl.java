@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * @author mithl
  * @date 20-02-2026
@@ -46,18 +45,20 @@ public class BookingServiceImpl implements BookingService {
 
         Show show = showRepository.findById(bookingRequest.getShowId()).orElseThrow(() -> new ResourceNotFoundException("Show not found"));
 
-        List<Seat> availableSeats = seatRepository.findByShowIdAndStatus(show.getId(), SeatStatus.AVAILABLE);
+        List<Seat> seatsToBook = seatRepository.findSeatByShowIdAndSeatNumberForBooking(bookingRequest.getShowId(), bookingRequest.getSeats());
 
-        List<String> seatsToBook =bookingRequest.getSeats();
+        if (seatsToBook.size() != bookingRequest.getSeats().size()) {
+            throw new SeatNotAvailableException("One or more seats not found");
+        }
 
         List<Seat> bookedSeats = new ArrayList<>();
-        for(String seatNumber : seatsToBook){
-            for(Seat seat : availableSeats){
-                if(seat.getSeatNumber().equalsIgnoreCase(seatNumber)){
-                    seat.setStatus(SeatStatus.BOOKED);
-                    bookedSeats.add(seat);
-                }
-            }
+        for(Seat seat : seatsToBook){
+          if(seat.getStatus() != SeatStatus.AVAILABLE) {
+              throw new SeatNotAvailableException("Seat:"+seat.getSeatNumber()+" not available to book");
+          }
+
+          seat.setStatus(SeatStatus.BOOKED);
+          bookedSeats.add(seat);
         }
 
         if(bookedSeats.isEmpty()){
