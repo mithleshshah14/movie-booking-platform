@@ -34,6 +34,6 @@ public class BookingController {
 
         BookingResponse bookingResponse = bookingService.getBooking(bookingId);
 
-        return ResponseEntity.status(201).body(bookingResponse);
+        return ResponseEntity.ok(bookingResponse);
     }
 }

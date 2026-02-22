@@ -1,6 +1,7 @@
 package com.mith.movie_booking_platform.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,14 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class NotificationService {
 
+    private final ObjectMapper objectMapper;
+
     @KafkaListener(topics = "booking-events", groupId = "notification-group")
-    public void bookingEventListener(String eventJson) {  // ✅ String, not BookingEvent
+    public void bookingEventListener(String eventJson) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             BookingEvent bookingEvent = objectMapper.readValue(eventJson, BookingEvent.class);
 
@@ -31,7 +34,7 @@ public class NotificationService {
     }
 
     private void sendEmailNotification(BookingEvent event) {
-        log.info("📧 Sending email to user: {}", event.getUserId());
+        log.info("Sending email to user: {}", event.getUserId());
         log.info("Subject: Booking Confirmed - {}", event.getMovieTitle());
         log.info("Booking ID: {}, Seats: {}, Total: ₹{}",
                 event.getBookingId(),

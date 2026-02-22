@@ -16,6 +16,7 @@ import com.mith.movie_booking_platform.repository.ShowRepository;
 import com.mith.movie_booking_platform.request.BookingRequest;
 import com.mith.movie_booking_platform.response.BookingResponse;
 import com.mith.movie_booking_platform.service.BookingService;
+import com.mith.movie_booking_platform.service.DiscountStrategy;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,8 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
 
     private final BookingEventProducer bookingEventProducer;
+
+    private final List<DiscountStrategy> discountStrategies;
 
     @Transactional
     @Override
@@ -109,16 +112,11 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.entityToResponse(booking);
     }
 
-    public static double calculatePrice(double price, int numberOfSeats, LocalTime showTime) {
+    public double calculatePrice(double price, int numberOfSeats, LocalTime showTime) {
         double totalPrice = price * numberOfSeats;
 
-        if(numberOfSeats >= 3){
-            totalPrice -= (price * 0.5);
-        }
-
-        if (showTime.isAfter(LocalTime.of(12, 0)) &&
-                showTime.isBefore(LocalTime.of(17, 0))) {
-            totalPrice *= 0.8;
+        for (DiscountStrategy strategy : discountStrategies) {
+            totalPrice = strategy.apply(totalPrice, price, numberOfSeats, showTime);
         }
 
         return totalPrice;
