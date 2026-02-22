@@ -1,4 +1,4 @@
-package com.mith.movie_booking_platform.service.impl;
+package com.mith.movie_booking_platform.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * @author mithl
- * @date 21-02-2026
+ * @date 22-02-2026
  * @email mithleshshah84@gmail.com
  */
 @AutoConfigureMockMvc
 @SpringBootTest
-class ShowServiceImplTest {
+class ShowControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -26,7 +26,7 @@ class ShowServiceImplTest {
     void getShows() throws Exception {
 
         mockMvc.perform(get("/api/shows").param("movieId","1")
-                .param("city","Bhopal").param("date","2025-02-26"))
+                        .param("city","Bhopal").param("date","2025-02-26"))
                 .andExpect(jsonPath("$",hasSize(3)));
 
     }
