@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,6 +24,7 @@ public class BookingEventProducer {
 
     private static final String TOPIC = "booking-events";
 
+    @Async
     public void publishBookingEvent(BookingEvent event) {
         try {
             String jsonEvent = objectMapper.writeValueAsString(event);
