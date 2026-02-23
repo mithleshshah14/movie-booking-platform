@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,21 +26,22 @@ public class ShowController {
     private final ShowService showService;
 
     @GetMapping
-    public ResponseEntity<List<ShowResponse>> getShows(@RequestParam Long movieId, @RequestParam String city,
-                                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate date){
-        List<ShowResponse> showResponseList = showService.getShows(movieId, city, date);
+    public Mono<ResponseEntity<List<ShowResponse>>> getShows(
+            @RequestParam Long movieId,
+            @RequestParam String city,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        return ResponseEntity.ok(showResponseList);
+        return Mono.fromCallable(() -> showService.getShows(movieId, city, date))
+                .map(ResponseEntity::ok);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ShowResponse>> getAllShows(){
-        List<ShowResponse> showResponseList = showService.getAllShows();
-
-        return ResponseEntity.ok(showResponseList);
+    public Flux<ShowResponse> getAllShows() {
+        return Flux.fromIterable(showService.getAllShows());
     }
 
-    @GetMapping("/{showId}/seats")
+
+        @GetMapping("/{showId}/seats")
     public ResponseEntity<List<SeatResponse>> getSeatsForShow(@PathVariable Long showId){
         List<SeatResponse> seatResponseList = showService.getSeatsForShow(showId);
         return ResponseEntity.ok(seatResponseList);
