@@ -20,6 +20,6 @@ public interface ShowMapper {
     @Mapping(source = "theatre.name", target = "theatreName")
     @Mapping(source = "theatre.city", target = "city")
     @Mapping(source = "theatre.address", target = "theatreAddress")
-    @Mapping(target = "availableSeats", ignore = true)  // Calculate separately
+    @Mapping(target = "availableSeats", ignore = true)
     ShowResponse entityToResponse(Show show);
 }
