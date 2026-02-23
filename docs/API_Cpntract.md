@@ -1,7 +1,7 @@
 # API Contract — Movie Booking Platform
 
-**Base URL:** `https://api.moviebooking.com/api`
-**Auth:** Bearer JWT Token in Authorization header
+**Base URL:** `https://api.moviebooking.com/api`  
+**Auth:** Bearer JWT Token in Authorization header  
 **Content-Type:** `application/json`
 
 ---
@@ -10,6 +10,7 @@
 
 ### GET /shows
 Browse shows by movie, city and date.
+**Response Type:** `Mono<ResponseEntity<List<ShowResponse>>>` — Reactive, non-blocking
 
 **Query Parameters:**
 | Param | Type | Required | Description |
@@ -50,6 +51,7 @@ Authorization: Bearer <token>
 
 ### GET /shows/all
 Get all shows in the system.
+**Response Type:** `Flux<ShowResponse>` — Reactive, streams multiple results
 
 **Request:**
 ```

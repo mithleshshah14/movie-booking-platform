@@ -152,7 +152,7 @@ CREATE INDEX idx_bookings_user     ON bookings(user_id);
 | Locking | Pessimistic Write Lock | Simpler, consistent, no distributed lock complexity |
 | Notifications | Async via Kafka | Booking response not blocked by email/SMS latency |
 | Cloud | AWS | EKS for containers, RDS for PostgreSQL, MSK for Kafka |
-| Caching | Redis | Reduce DB load for read-heavy show browsing |
+| Reactive | Spring WebFlux (Mono/Flux) | Non-blocking I/O for read-heavy show browsing — show endpoints use Mono/Flux, booking stays traditional due to pessimistic locking + @Transactional |
 
 ---
 
