@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Booking Platform — HLD</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background: #f9fafb; padding: 30px; }
+    h1 { text-align: center; font-size: 22px; margin-bottom: 5px; }
+    .subtitle { text-align: center; color: #6b7280; font-size: 14px; margin-bottom: 30px; }
+
+    .layer { display: flex; justify-content: center; margin-bottom: 5px; }
+    .arrow { text-align: center; color: #9ca3af; font-size: 22px; margin: 4px 0; }
+    .arrow-label { text-align: center; color: #9ca3af; font-size: 12px; }
+
+    .box {
+        border: 2px solid;
+        border-radius: 8px;
+        padding: 8px 12px;
+        text-align: center;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        min-width: 120px;
+    }
+    .box .title { font-weight: bold; font-size: 13px; }
+    .box .sub { color: #6b7280; font-size: 11px; margin-top: 2px; }
+
+    .blue { border-color: #60a5fa; }
+    .purple { border-color: #a78bfa; }
+    .green { border-color: #34d399; }
+    .red { border-color: #f87171; }
+    .yellow { border-color: #fbbf24; }
+    .orange { border-color: #fb923c; }
+
+    .services { display: flex; justify-content: center; gap: 12px; margin-bottom: 5px; }
+
+    .bottom { display: flex; justify-content: center; gap: 40px; margin-top: 15px; align-items: flex-start; }
+
+    .column { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .col-title { font-size: 12px; color: #6b7280; font-weight: bold; margin-bottom: 4px; }
+
+    .middle-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 40px; }
+    .middle-arrow .label { font-size: 11px; color: #9ca3af; }
+    .middle-arrow .arr { font-size: 22px; color: #9ca3af; }
+
+    .notification-row { display: flex; gap: 8px; margin-top: 4px; }
+
+    .callout {
+        margin: 15px auto;
+        max-width: 600px;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 12px;
+        text-align: center;
+    }
+    .callout.yellow-c { background: #fefce8; border: 1px solid #fbbf24; }
+    .callout.green-c { background: #f0fdf4; border: 1px solid #34d399; }
+    .callout strong { font-weight: bold; }
+    code { background: #f3f4f6; padding: 1px 4px; border-radius: 3px; font-size: 11px; }
+
+    .tech-stack { margin-top: 20px; text-align: center; }
+    .tech-stack h2 { font-size: 13px; color: #6b7280; margin-bottom: 10px; }
+    .tags { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .tag { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .tag.java { background: #dbeafe; color: #1d4ed8; }
+    .tag.spring { background: #dcfce7; color: #15803d; }
+    .tag.pg { background: #fef9c3; color: #854d0e; }
+    .tag.kafka { background: #fee2e2; color: #b91c1c; }
+    .tag.redis { background: #ffedd5; color: #c2410c; }
+    .tag.jwt { background: #f3e8ff; color: #7e22ce; }
+    .tag.aws { background: #f3f4f6; color: #374151; }
+  </style>
+</head>
+<body>
+
+<h1>Movie Booking Platform — HLD</h1>
+<p class="subtitle">High Level Architecture</p>
+
+<!-- Client -->
+<div class="layer">
+  <div class="box blue" style="min-width:160px">
+    <div class="title">Client</div>
+    <div class="sub">Web / Mobile</div>
+  </div>
+</div>
+
+<div class="arrow-label">HTTPS</div>
+<div class="arrow">↓</div>
+
+<!-- API Gateway -->
+<div class="layer">
+  <div class="box purple" style="min-width:220px">
+    <div class="title">API Gateway</div>
+    <div class="sub">Auth · Rate Limit · Routing</div>
+  </div>
+</div>
+
+<div class="arrow-label">JWT validated</div>
+<div class="arrow">↓</div>
+
+<!-- Services -->
+<div class="services">
+  <div class="box green">
+    <div class="title">Movie Service</div>
+    <div class="sub">Browse movies</div>
+  </div>
+  <div class="box green">
+    <div class="title">Show Service</div>
+    <div class="sub">Shows & Seats</div>
+    <div class="sub">Mono / Flux ⚡</div>
+  </div>
+  <div class="box red">
+    <div class="title">Booking Service</div>
+    <div class="sub">Book tickets</div>
+  </div>
+  <div class="box green">
+    <div class="title">Theatre Service</div>
+    <div class="sub">B2B onboarding</div>
+  </div>
+</div>
+
+<!-- Bottom section -->
+<div class="bottom">
+
+  <!-- DB Column -->
+  <div class="column">
+    <div class="col-title">Persistence</div>
+    <div class="box yellow">
+      <div class="title">PostgreSQL</div>
+      <div class="sub">Movies · Shows</div>
+    </div>
+    <div class="box yellow">
+      <div class="title">PostgreSQL</div>
+      <div class="sub">Bookings · Seats</div>
+    </div>
+    <div class="box orange">
+      <div class="title">Redis</div>
+      <div class="sub">Cache · Seat Locking</div>
+    </div>
+  </div>
+
+  <!-- Middle Arrow -->
+  <div class="middle-arrow">
+    <div class="label">Booking confirmed</div>
+    <div class="arr">→</div>
+    <div class="label">Kafka event</div>
+  </div>
+
+  <!-- Kafka + Notifications -->
+  <div class="column">
+    <div class="col-title">Event Streaming</div>
+    <div class="box red" style="min-width:160px">
+      <div class="title">Kafka</div>
+      <div class="sub">booking-events topic</div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="box blue" style="min-width:160px">
+      <div class="title">Notification Service</div>
+      <div class="sub">Consumer Group</div>
+    </div>
+    <div class="notification-row">
+      <div class="box" style="border-color:#9ca3af;min-width:70px">
+        <div class="title">📧 Email</div>
+      </div>
+      <div class="box" style="border-color:#9ca3af;min-width:70px">
+        <div class="title">📱 SMS</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Callouts -->
+<div class="callout yellow-c">
+  <strong>🔒 Concurrency:</strong> Pessimistic Write Lock on seat fetch via
+  <code>@Lock(PESSIMISTIC_WRITE)</code> — prevents double booking at DB level.
+  Entire booking wrapped in <code>@Transactional</code>.
+  Redis used for seat caching with Cache-Aside pattern.
+</div>
+
+<div class="callout green-c">
+  <strong>💡 Discount (Strategy Pattern):</strong> ThirdTicketDiscountStrategy (50% off 3rd ticket) +
+  AfternoonDiscountStrategy (20% off 12pm–5pm).
+  New discounts added without modifying existing code — Open/Closed Principle.
+</div>
+
+<!-- Tech Stack -->
+<div class="tech-stack">
+  <h2>Tech Stack</h2>
+  <div class="tags">
+    <span class="tag java">Java 17</span>
+    <span class="tag spring">Spring Boot</span>
+    <span class="tag pg">PostgreSQL</span>
+    <span class="tag kafka">Kafka</span>
+    <span class="tag redis">Redis</span>
+    <span class="tag jwt">JWT</span>
+    <span class="tag aws">AWS</span>
+    <span class="tag spring">WebFlux</span>
+  </div>
+</div>
+
+</body>
+</html>
