@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,18 +24,17 @@ public class ShowController {
     private final ShowService showService;
 
     @GetMapping
-    public Mono<ResponseEntity<List<ShowResponse>>> getShows(
+    public ResponseEntity<List<ShowResponse>> getShows(
             @RequestParam Long movieId,
             @RequestParam String city,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        return Mono.fromCallable(() -> showService.getShows(movieId, city, date))
-                .map(ResponseEntity::ok);
+        return ResponseEntity.ok(showService.getShows(movieId, city, date));
     }
 
     @GetMapping("/all")
-    public Flux<ShowResponse> getAllShows() {
-        return Flux.fromIterable(showService.getAllShows());
+    public ResponseEntity<List<ShowResponse>> getAllShows() {
+        return ResponseEntity.ok(showService.getAllShows());
     }
 
 
